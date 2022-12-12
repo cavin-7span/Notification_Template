@@ -1,0 +1,2 @@
+const webNotificationKey =
+    "BIXls5hMBVW3Ul1Vh6KGYE0F15jwQ-05ZI1FBvP-2Y_xmIlxs7sLX0I16KT_e6L45pI8wz4Z7d0u-_3XJTZP0Wc";
