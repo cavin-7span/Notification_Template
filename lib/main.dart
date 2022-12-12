@@ -16,16 +16,22 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   if (!kIsWeb) {
     FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+    await Firebase.initializeApp();
+  } else {
+    await Firebase.initializeApp(
+      options: const FirebaseOptions(
+        apiKey: "AIzaSyB_WB7Wja1c3KQIMwb8ERres840PdEi-Ng",
+        appId: "1:595028006349:web:d702ff566628aef278a084",
+        messagingSenderId: "595028006349",
+        projectId: "notification-template-d55fc",
+      ),
+    );
   }
 
-  // final fcmToken = await FirebaseMessaging.instance.getToken();
-  // log(fcmToken.toString());
-  // debugPrint(fcmToken.toString());
-
-  NotificationInitialization notificationInitialization =
-      NotificationInitialization();
+  // NotificationInitialization notificationInitialization =
+  //     NotificationInitialization();
   log("Handling notification service");
-  notificationInitialization.startNotificationService();
+  NotificationInitialization.startNotificationService();
 
   // log("Handling a background message: ${message.messageId}");
   //check the permission
@@ -108,6 +114,7 @@ class _MyHomePageState extends State<MyHomePage> {
     print('User granted web permission: ${settings.authorizationStatus}');
     final fcmToken = await FirebaseMessaging.instance.getToken();
     log("fcmToken: $fcmToken");
+    debugPrint("fcmToken: $fcmToken");
   }
 
   void messageListener(BuildContext context) {

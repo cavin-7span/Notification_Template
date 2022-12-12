@@ -66,23 +66,22 @@ class NotificationInitialization {
   factory NotificationInitialization() => _instance;
   NotificationInitialization._internal();
 
-  final NotificationHelper _notificationHelper = NotificationHelper();
-  startNotificationService() async {
-    if (kIsWeb) {
-      await Firebase.initializeApp(
-        options: const FirebaseOptions(
-          apiKey: "AIzaSyB_WB7Wja1c3KQIMwb8ERres840PdEi-Ng",
-          appId: "1:595028006349:web:d702ff566628aef278a084",
-          messagingSenderId: "595028006349",
-          projectId: "notification-template-d55fc",
-        ),
-      );
-    } else {
+  static void startNotificationService() async {
+    final NotificationHelper notificationHelper = NotificationHelper();
+    if (!kIsWeb) {
+      // await Firebase.initializeApp(
+      //   options: const FirebaseOptions(
+      //     apiKey: "AIzaSyB_WB7Wja1c3KQIMwb8ERres840PdEi-Ng",
+      //     appId: "1:595028006349:web:d702ff566628aef278a084",
+      //     messagingSenderId: "595028006349",
+      //     projectId: "notification-template-d55fc",
+      //   ),
+      // );
       await Firebase.initializeApp();
-      await _notificationHelper.tokenInit();
-      await _notificationHelper.setupFlutterNotifications();
-      _notificationHelper.getMessageStream();
-    }
+      await notificationHelper.tokenInit();
+      await notificationHelper.setupFlutterNotifications();
+      notificationHelper.getMessageStream();
+    } else {}
   }
 }
 
