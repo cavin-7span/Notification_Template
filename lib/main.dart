@@ -4,8 +4,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:notification_template/notification_channel.dart';
+import 'package:notification_template/notification_service.dart';
+import 'package:notification_template/widgets/web_notification_dialog.dart';
 
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
@@ -14,6 +14,12 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  // RemoteMessage? initialMessage =
+  // await FirebaseMessaging.instance.getInitialMessage();
+  // if (initialMessage != null) {
+  // App received a notification when it was killed
+  // log("message");
+  // }
   if (!kIsWeb) {
     FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
     await Firebase.initializeApp();
@@ -81,11 +87,11 @@ class _MyHomePageState extends State<MyHomePage> {
               'Message also contained a notification: ${message.notification?.body}');
           showDialog(
             context: context,
-            builder: ((BuildContext context) {
+            builder: (BuildContext context) {
               return DynamicDialog(
                   title: message.notification?.title,
                   body: message.notification?.body);
-            }),
+            },
           );
         }
       },
@@ -141,30 +147,6 @@ class _MyHomePageState extends State<MyHomePage> {
         tooltip: 'Increment',
         child: const Icon(Icons.add),
       ),
-    );
-  }
-}
-
-//push notification dialog for foreground
-class DynamicDialog extends StatelessWidget {
-  final String? title;
-  final String? body;
-  const DynamicDialog({super.key, this.title, this.body});
-
-  @override
-  Widget build(BuildContext context) {
-    return AlertDialog(
-      title: Text(title ?? "N/A"),
-      actions: [
-        OutlinedButton.icon(
-          label: const Text('Close'),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          icon: const Icon(Icons.close),
-        )
-      ],
-      content: Text(body ?? "N/A"),
     );
   }
 }

@@ -82,21 +82,15 @@ class NotificationInitialization {
 
   static void startNotificationService() async {
     final NotificationHelper notificationHelper = NotificationHelper();
-    await notificationHelper.permissionCheck();
     if (!kIsWeb) {
-      // await Firebase.initializeApp(
-      //   options: const FirebaseOptions(
-      //     apiKey: "AIzaSyB_WB7Wja1c3KQIMwb8ERres840PdEi-Ng",
-      //     appId: "1:595028006349:web:d702ff566628aef278a084",
-      //     messagingSenderId: "595028006349",
-      //     projectId: "notification-template-d55fc",
-      //   ),
-      // );
-      await Firebase.initializeApp();
       await notificationHelper.tokenInit();
+      await notificationHelper.permissionCheck();
       await notificationHelper.setupFlutterNotifications();
       notificationHelper.getMessageStream();
-    } else {}
+    } else {
+      await notificationHelper.tokenInit();
+      await notificationHelper.permissionCheck();
+    }
   }
 }
 
