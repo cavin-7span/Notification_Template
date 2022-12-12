@@ -27,6 +27,20 @@ class NotificationHelper {
     debugPrint("fcmToken web: $fcmWebToken");
   }
 
+  Future<void> permissionCheck() async {
+    NotificationSettings settings =
+        await FirebaseMessaging.instance.requestPermission(
+      alert: true,
+      announcement: false,
+      badge: true,
+      carPlay: false,
+      criticalAlert: false,
+      provisional: false,
+      sound: true,
+    );
+    log('User granted permission: ${settings.authorizationStatus}');
+  }
+
   Future<void> setupFlutterNotifications() async {
     channel = const AndroidNotificationChannel(
       'high_importance_channel', // id
@@ -68,6 +82,7 @@ class NotificationInitialization {
 
   static void startNotificationService() async {
     final NotificationHelper notificationHelper = NotificationHelper();
+    await notificationHelper.permissionCheck();
     if (!kIsWeb) {
       // await Firebase.initializeApp(
       //   options: const FirebaseOptions(

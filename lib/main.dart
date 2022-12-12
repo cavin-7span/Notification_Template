@@ -28,38 +28,8 @@ void main() async {
     );
   }
 
-  // NotificationInitialization notificationInitialization =
-  //     NotificationInitialization();
   log("Handling notification service");
   NotificationInitialization.startNotificationService();
-
-  // log("Handling a background message: ${message.messageId}");
-  //check the permission
-  NotificationSettings settings =
-      await FirebaseMessaging.instance.requestPermission(
-    alert: true,
-    announcement: false,
-    badge: true,
-    carPlay: false,
-    criticalAlert: false,
-    provisional: false,
-    sound: true,
-  );
-
-  log('User granted permission: ${settings.authorizationStatus}');
-  // setupFlutterNotifications();
-//listen to the foreground notification
-
-  // const AndroidNotificationChannel channel = AndroidNotificationChannel(
-  //   'high_importance_channel', // id
-  //   'High Importance Notifications', // title
-  //   description:
-  //       'This channel is used for important notifications.', // description
-  //   importance: Importance.max,
-  //   enableVibration: true,
-  //   playSound: true,
-  //   enableLights: true,
-  // );
 
   runApp(const MyApp());
 }
@@ -99,24 +69,7 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  Future<void> getPermission() async {
-    FirebaseMessaging messaging = FirebaseMessaging.instance;
-    NotificationSettings settings = await messaging.requestPermission(
-      alert: true,
-      announcement: false,
-      badge: true,
-      carPlay: false,
-      criticalAlert: false,
-      provisional: false,
-      sound: true,
-    );
-
-    print('User granted web permission: ${settings.authorizationStatus}');
-    final fcmToken = await FirebaseMessaging.instance.getToken();
-    log("fcmToken: $fcmToken");
-    debugPrint("fcmToken: $fcmToken");
-  }
-
+  // message listner for web
   void messageListener(BuildContext context) {
     FirebaseMessaging.onMessage.listen(
       (RemoteMessage message) {
@@ -142,18 +95,10 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     if (kIsWeb) {
-      getPermission();
       messageListener(context);
       super.initState();
     }
   }
-
-  // @override
-  // void didChangeDependencies() {
-  //   getPermission();
-  //   messageListener(context);
-  //   super.didChangeDependencies();
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -201,29 +146,25 @@ class _MyHomePageState extends State<MyHomePage> {
 }
 
 //push notification dialog for foreground
-class DynamicDialog extends StatefulWidget {
-  final title;
-  final body;
-  DynamicDialog({this.title, this.body});
-  @override
-  _DynamicDialogState createState() => _DynamicDialogState();
-}
+class DynamicDialog extends StatelessWidget {
+  final String? title;
+  final String? body;
+  const DynamicDialog({super.key, this.title, this.body});
 
-class _DynamicDialogState extends State<DynamicDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text(widget.title),
-      actions: <Widget>[
+      title: Text(title ?? "N/A"),
+      actions: [
         OutlinedButton.icon(
-          label: Text('Close'),
+          label: const Text('Close'),
           onPressed: () {
             Navigator.pop(context);
           },
-          icon: Icon(Icons.close),
+          icon: const Icon(Icons.close),
         )
       ],
-      content: Text(widget.body),
+      content: Text(body ?? "N/A"),
     );
   }
 }
