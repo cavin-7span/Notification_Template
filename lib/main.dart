@@ -14,12 +14,7 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // RemoteMessage? initialMessage =
-  // await FirebaseMessaging.instance.getInitialMessage();
-  // if (initialMessage != null) {
-  // App received a notification when it was killed
-  // log("message");
-  // }
+
   if (!kIsWeb) {
     FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
     await Firebase.initializeApp();
